@@ -22,6 +22,16 @@ haiku-low | ctx: 12% (TTL 04:59) | git diff 1 files +281 -266 | 5h: 75% (↺2h10
 
 ## Install
 
+### Let Claude Code install it
+
+Paste this into Claude Code:
+
+```text
+Clone git@github.com:jiho264/custom-claude-status-bar-setup.git into ~/custom-claude-status-bar-setup, run its install.sh, then check that the statusLine entry in ~/.claude/settings.json is set correctly. Tell me when Claude Code needs a restart.
+```
+
+### Manual install
+
 ```bash
 git clone git@github.com:jiho264/custom-claude-status-bar-setup.git
 cd custom-claude-status-bar-setup
@@ -34,14 +44,6 @@ What `install.sh` does:
 2. Sets the `statusLine` entry in `~/.claude/settings.json`. Other settings are left untouched. The previous file is backed up as `settings.json.bak.<timestamp>`.
 
 Restart Claude Code after installing to apply the change.
-
-## Install with Claude Code
-
-Paste this into Claude Code:
-
-```text
-Clone git@github.com:jiho264/custom-claude-status-bar-setup.git into ~/custom-claude-status-bar-setup, run its install.sh, then check that the statusLine entry in ~/.claude/settings.json is set correctly. Tell me when Claude Code needs a restart.
-```
 
 ## Notes
 
