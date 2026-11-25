@@ -35,6 +35,14 @@ bash install.sh
 
 설치 후 Claude Code를 다시 시작하면 적용됩니다.
 
+## Install with Claude Code
+
+Paste this into Claude Code:
+
+```text
+Clone git@github.com:jiho264/custom-claude-status-bar-setup.git into ~/custom-claude-status-bar-setup, run its install.sh, then check that the statusLine entry in ~/.claude/settings.json is set correctly. Tell me when Claude Code needs a restart.
+```
+
 ## 참고
 
 - git 표시는 `git --no-optional-locks`로 실행되므로 1초마다 갱신돼도 index 락을 잡지 않습니다.
