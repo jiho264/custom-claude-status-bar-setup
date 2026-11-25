@@ -2,7 +2,7 @@
 export STATUSLINE_INPUT="$(cat)"
 
 python3 <<'PY'
-import json, os, datetime
+import json, os, datetime, subprocess
 
 d = json.loads(os.environ['STATUSLINE_INPUT'])
 
@@ -27,40 +27,8 @@ def remaining_str(ts):
 reset5_str = remaining_str(r5_obj.get('resets_at'))
 reset7_str = remaining_str(r7_obj.get('resets_at'))
 
-in_new = in_cached = out_tot = 0
-last_ts = None; last_ttl = 300
-tp = d.get('transcript_path')
-if tp and os.path.exists(tp):
-    try:
-        with open(tp) as f:
-            for line in f:
-                try: e = json.loads(line)
-                except: continue
-                u = (e.get('message') or {}).get('usage')
-                if not u: continue
-                cc = u.get('cache_creation') or {}
-                if e.get('timestamp') and not e.get('isSidechain'):
-                    try:
-                        last_ts = datetime.datetime.fromisoformat(e['timestamp'].replace('Z', '+00:00')).timestamp()
-                        if cc.get('ephemeral_1h_input_tokens', 0) > 0: last_ttl = 3600
-                        elif cc.get('ephemeral_5m_input_tokens', 0) > 0: last_ttl = 300
-                    except: pass
-                in_new += int(u.get('input_tokens', 0))
-                in_new += int(u.get('cache_creation_input_tokens', 0))
-                in_cached += int(u.get('cache_read_input_tokens', 0))
-                out_tot += int(u.get('output_tokens', 0))
-    except: pass
-
-def fmt(n):
-    return f'{n/1e6:.1f}M'
-
 def clr(p):
     return '\033[31m' if p >= 90 else '\033[33m' if p >= 70 else '\033[32m'
-
-cache_str = ''
-if last_ts:
-    left = int(last_ts + last_ttl - datetime.datetime.now().timestamp())
-    cache_str = ' ⏳cache:' + (f'{left//60}:{left%60:02d}' if left > 0 else 'expired')
 
 R = '\033[0m'
 GRAY = '\033[90m'
@@ -75,7 +43,6 @@ if exp:
 else:
     cache_str = 'TTL --:--'
 # git: tracked changes vs HEAD (untracked ignored); always shown, 0 when clean
-import subprocess
 cwd = (d.get('workspace') or {}).get('current_dir') or d.get('cwd') or os.getcwd()
 def git(*args):
     try:
